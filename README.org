@@ -5,7 +5,7 @@ Sinofine's Doom config
 * Install
 #+begin_src bash
 # fetch config
-git clone --recurse-submodules https://github.com/Sinofine/doom.d.git .config/doom
+git clone --recurse-submodules https://github.com/Sinofine/doom.d.git ~/.config/doom
 
 # install doom
 git clone --depth 1 https://github.com/doomemacs/doomemacs ~/.config/emacs
