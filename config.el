@@ -103,3 +103,6 @@
                                                (interactive)
                                                (doom-project-find-file "/etc/nixos/")))
 (map! :leader :desc "Open telega" :n "ot" 'telega)
+;; (define-key yas-minor-mode-map (kbd "SPC") yas-maybe-expand)
+
+(after! yasnippet (map! :map yas-minor-mode-map "SPC" yas-maybe-expand))
