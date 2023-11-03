@@ -1,0 +1,16 @@
+#+title: Readme
+
+Sinofine's Doom config
+
+* Install
+#+begin_src bash
+# fetch config
+git clone --recurse-submodules https://github.com/Sinofine/doom.d.git .config/doom
+
+# install doom
+git clone --depth 1 https://github.com/doomemacs/doomemacs ~/.config/emacs
+~/.config/emacs/bin/doom install
+#+end_src
+
+** Logo size
+The height of the logo is preferred at 96px.
