@@ -106,3 +106,5 @@
 ;; (define-key yas-minor-mode-map (kbd "SPC") yas-maybe-expand)
 
 (after! yasnippet (map! :map yas-minor-mode-map "SPC" yas-maybe-expand))
+
+(setq org-preview-latex-default-process 'dvisvgm )
