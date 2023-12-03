@@ -101,10 +101,15 @@
 ))
 (map! :leader :desc "Open nix folder" :n "nix" (lambda ()
                                                (interactive)
-                                               (doom-project-find-file "/etc/nixos/")))
+                                               (doom-project-find-file "~/nixconfig")))
 (map! :leader :desc "Open telega" :n "ot" 'telega)
 ;; (define-key yas-minor-mode-map (kbd "SPC") yas-maybe-expand)
-
-(after! yasnippet (map! :map yas-minor-mode-map "SPC" yas-maybe-expand))
+  (defun my-yas-try-expanding-auto-snippets ()
+    (when (and (boundp 'yas-minor-mode) yas-minor-mode)
+      (let ((yas-buffer-local-condition ''(require-snippet-condition . auto)))
+        (yas-expand))))
+  (add-hook 'post-command-hook #'my-yas-try-expanding-auto-snippets)
+;;(after! yasnippet (map! :map yas-minor-mode-map "SPC" yas-maybe-expand))
 
 (setq org-preview-latex-default-process 'dvisvgm )
+;;(setq lsp-rust-analyzer-store-path (shell-command-to-string "readlink -f $(which rust-analyzer )"))
