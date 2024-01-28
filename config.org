@@ -1,11 +1,20 @@
+* Sinofine's configuration towards DOOM Emacs.
+Experimental.
+#+begin_src emacs-lisp :tangle yes
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
 ;; Speed up.
 (setq read-process-output-max (* 1024 1024)) ;; 1mb
 (setq gc-cons-threshold 100000000)
-
+#+end_src
+** Identificaion
+#+begin_src emacs-lisp :tangle yes
 (setq user-full-name "Sinofine Lotusie"
       user-mail-address "i@sinofine.me")
+#+end_src
 
+** Macros
+*** Add fs to hook.
+#+begin_src emacs-lisp :tangle yes
 (defmacro add-fs-to-hook (hook &rest funcs)
   "Add functions to hook. A function is either an unquoted token, or a form.
 If it's a token, then its treated as a function and enabled. Otherwise, the form is run."
@@ -19,32 +28,58 @@ If it's a token, then its treated as a function and enabled. Otherwise, the form
 (defmacro fn (&rest forms)
   (declare (indent 0))
   `(lambda () ,@forms))
+#+end_src
 
+** General Settings
+*** Do not confirm kill.
+#+begin_src emacs-lisp :tangle yes
 (setq confirm-kill-emacs nil)
-
+#+end_src
+*** Keybindings.
+#+begin_src emacs-lisp :tangle yes
 (map! :leader
       :desc "Open nix folder"
       :n "nix"
       (lambda ()
         (interactive)
         (doom-project-find-file "~/nixconfig")))
-
+#+end_src
+** Graphics
+*** Set theme.
+#+begin_src emacs-lisp :tangle yes
 (setq doom-theme 'doom-opera)
+#+end_src
 
+*** Set splash screen image & modify padding.
+#+begin_src emacs-lisp :tangle yes
 (setq fancy-splash-image (concat doom-user-dir "logo/hfut.svg"))
 (setq +doom-dashboard-banner-padding '(2 . 3))
+#+end_src
 
+*** Enable line numbers, set it to relative.
+#+begin_src emacs-lisp :tangle yes
 (setq display-line-numbers-type 'relative)
-
+#+end_src
+***** And set styles of line numbers.
+#+begin_src emacs-lisp :tangle yes
 (set-face-attribute 'line-number nil
                     :italic nil)
+#+end_src
 
+*** Set frame size & enable transparent background.
+#+begin_src emacs-lisp :tangle yes
 (setq default-frame-alist '((width . 90)
                             (height . 50)
                             (alpha-background . 80)))
+#+end_src
 
+*** Enable precise scroll.
+#+begin_src emacs-lisp :tangle yes
 (pixel-scroll-precision-mode)
+#+end_src
 
+*** Customize dashboard menus.
+#+begin_src emacs-lisp :tangle yes
 (setq +doom-dashboard-menu-sections
       '(
         ("Recently opened files" :icon
@@ -67,7 +102,11 @@ If it's a token, then its treated as a function and enabled. Otherwise, the form
          (file-directory-p doom-user-dir)
          :action doom/open-private-config)
         ))
+#+end_src
 
+*** Set fonts
+I use cnfonts to align fonts.
+#+begin_src emacs-lisp :tangle yes
 (cnfonts-mode 1)
 (setq cnfonts-personal-fontnames '(("Luxi Mono") ("HYXinRenWenSongW") () ())
       cnfonts-use-face-font-rescale t)
@@ -78,17 +117,31 @@ If it's a token, then its treated as a function and enabled. Otherwise, the form
   (set-fontset-font (frame-parameter nil 'font) 'emoji (font-spec :family "Segoe UI Emoji"))
   )
 (add-hook 'cnfonts-set-font-finish-hook 'init-cjk-fonts)
+#+end_src
 
+Define maps.
+#+begin_src emacs-lisp :tangle yes
 (define-key cnfonts-mode-map (kbd "C--") #'cnfonts-decrease-fontsize)
 (define-key cnfonts-mode-map (kbd "C-=") #'cnfonts-increase-fontsize)
+#+end_src
 
+** Packages
+*** Org mode.
+**** Do not evaluate code blocks when exporting.
+#+begin_src emacs-lisp :tangle yes
 (setq org-export-use-babel nil)
-
+#+end_src
+**** Do not confirm before evaluation.
+#+begin_src emacs-lisp :tangle yes
 (setq org-confirm-babel-evaluate nil)
-
+#+end_src
+**** Show images when opening a file & after evaluating code blocks.
+#+begin_src emacs-lisp :tangle yes
 (setq org-startup-with-inline-images t)
 (add-hook 'org-babel-after-execute-hook 'org-display-inline-images)
-
+#+end_src
+**** LaTeX preview.
+#+begin_src emacs-lisp :tangle yes
 (setq org-latex-preview-default-process 'dvisvgm
       org-latex-preview-options
       '(:foreground auto
@@ -97,11 +150,17 @@ If it's a token, then its treated as a function and enabled. Otherwise, the form
         :matchers ("begin" "$1" "$" "$$" "\\(" "\\[")
         :zoom 1.0)
       )
-
+#+end_src
+*** Telega.
+#+begin_src emacs-lisp :tangle yes
 (setq telega-emoji-use-images nil)
-
+#+end_src
+**** Keymaps.
+#+begin_src emacs-lisp :tangle yes
 (map! :leader :desc "Open telega" :n "ot" 'telega)
-
+#+end_src
+**** Modify message faces.
+#+begin_src emacs-lisp :tangle yes
 (setq telega-avatar-workaround-gaps-for '(return t))
 (add-hook 'telega-load-hook
           (lambda ()
@@ -119,7 +178,45 @@ If it's a token, then its treated as a function and enabled. Otherwise, the form
                                 :underline nil
                                 :height 0.84)
             ))
-
+#+end_src
+**** Modify brackets.
+#+begin_src emacs-lisp :tangle no
+(setq telega-brackets
+      `(((chat (type private bot))
+         ;; ,(concat (nerd-icons-mdicon "nf-md-robot_outline") " ")
+         ,(concat " "
+                  (nerd-icons-mdicon "nf-md-account"
+                                     :face '(:foreground "#86dffd" :height 0.7))
+                  " ") " ")
+        ((chat (type basicgroup))
+         ,(concat " "
+                  (nerd-icons-mdicon "nf-md-account_multiple"
+                                     :face '(:foreground "#70bcff" :height 0.7))
+                  " ") " ")
+        ((chat (type supergroup))
+         ,(concat " "
+                  (nerd-icons-mdicon "nf-md-account_multiple"
+                                     :face '(:foreground "#70bcff" :height 0.7))
+                  " ") " ")
+        ((chat (type channel))
+         ,(concat " "
+                  (nerd-icons-faicon "nf-fa-feed"
+                                     :face '(:foreground "#ffa95f" :height 0.7))
+                  " ") " ")
+        ((user (return t))
+         ,(concat " "
+                  (nerd-icons-mdicon "nf-md-account"
+                                     :face '(:foreground "#86dffd" :height 0.7))
+                  " ") " ")
+        ((return t)
+         ,(concat " "
+                  (nerd-icons-faicon "nf-fa-question_circle"
+                                     :face '(:foreground "#ff0000" :height 0.7))
+                  " ") " "))
+      )
+#+end_src
+**** Set bridge bots.
+#+begin_src emacs-lisp :tangle yes
 (require 'telega-bridge-bot)
 (setq telega-bridge-bot-bridge-info-plist
       '(-1001773572820 ; id of the @emacs_china
@@ -130,11 +227,19 @@ If it's a token, then its treated as a function and enabled. Otherwise, the form
         (5846938060
          (:type :matrix :chat-id "!uoEcEMNaQYWmDWUQYY:matrix.org")))
       telega-bridge-bot-matrix-user "@sinofine:envs.net")
+#+end_src
 
+*** AucTeX & CDLaTeX.
+I hardly use ~\textsf~, but ideals love ~\mathfrak~.
+#+begin_src emacs-lisp :tangle yes
 (setq cdlatex-math-modify-alist '((102 "\\mathfrak" "\\textsf" t nil nil)))
-
+#+end_src
+Make completion smarter.
+#+begin_src emacs-lisp :tangle yes
 (setq TeX-parse-self t)
-
+#+end_src
+Set viewers.
+#+begin_src emacs-lisp :tangle yes
 (setq pdf-viewer-exec-alist '((sioyek . "Sioyek")
                               (zathura . "Zathura")
                               (evince . "evince")
@@ -149,9 +254,26 @@ If it's a token, then its treated as a function and enabled. Otherwise, the form
                         (output-dvi ,my-pdf-viewer)
                         (output-html "xdg-open")))
                 auto-fill-mode)
-
+#+end_src
+*** Xenops. (That should be a perfect modern substitute for preview-latex)
+My screen so big that xenops preview should be small.
+#+begin_src emacs-lisp :tangle yes
 (setq xenops-math-image-scale-factor .5)
+#+end_src
+**** Some hooks. (Do I really need xenops?)
+#+begin_src emacs-lisp :tangle no
+(add-hook 'latex-mode-hook #'xenops-mode)
+(add-hook 'LaTeX-mode-hook #'xenops-mode)
+(add-hook 'org-mode-hook #'xenops-mode)
+#+end_src
 
+*** WhizzyTeX. (Another TeX previewer, hard to install.)
+#+begin_src emacs-lisp :tangle no
+(load! "/home/sinofine/.local/share/whizzytex/emacs/whizzytex.el")
+#+end_src
+
+*** Sage mode. (Virtually I need a calculator.)
+#+begin_src emacs-lisp :tangle yes
 (custom-set-variables
  '(sage-shell:use-prompt-toolkit nil)
  '(sage-shell:use-simple-prompt t)
@@ -160,18 +282,27 @@ If it's a token, then its treated as a function and enabled. Otherwise, the form
 (sage-shell:define-alias)
 (add-hook 'sage-shell-mode-hook #'eldoc-mode)
 (add-hook 'sage-shell:sage-mode-hook #'eldoc-mode)
-
+#+end_src
+**** Org mode associated.
+#+begin_src emacs-lisp :tangle yes
 (setq org-babel-default-header-args:sage
       '((:session . t)
         (:results . "output")))
 (with-eval-after-load "org"
   (define-key org-mode-map (kbd "C-c c")
               'ob-sagemath-execute-async))
+#+end_src
 
+*** Yas. (Do I really need that? Hope so.)
+**** Set auto triggers.
+#+begin_src emacs-lisp :tangle yes
 (defun my-yas-try-expanding-auto-snippets ()
   (when (and (boundp 'yas-minor-mode) yas-minor-mode)
     (let ((yas-buffer-local-condition ''(require-snippet-condition . auto)))
       (yas-expand))))
 (add-hook 'post-command-hook #'my-yas-try-expanding-auto-snippets)
-
+#+end_src
+**** Disable backquote change warnings.
+#+begin_src emacs-lisp :tangle yes
 (add-to-list 'warning-suppress-types '(yasnippet backquote-change))
+#+end_src

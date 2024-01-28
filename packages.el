@@ -10,33 +10,33 @@
 ;(package! some-package)
 (package! telega)
 (package! cnfonts)
-
 ;; Test new org preview
-(package! org :recipe
-  (:host nil :repo "https://git.tecosaur.net/mirrors/org-mode.git" :remote "mirror" :fork
-         (:host nil :repo "https://git.tecosaur.net/tec/org-mode.git" :branch "dev" :remote "tecosaur")
-         :files
-         (:defaults "etc")
-         :build t :pre-build
-         (with-temp-file "org-version.el"
-           (require 'lisp-mnt)
-           (let
-               ((version
-                 (with-temp-buffer
-                   (insert-file-contents "lisp/org.el")
-                   (lm-header "version")))
-                (git-version
-                 (string-trim
-                  (with-temp-buffer
-                    (call-process "git" nil t nil "rev-parse" "--short" "HEAD")
-                    (buffer-string)))))
-             (insert
-              (format "(defun org-release () \"The release version of Org.\" %S)\n" version)
-              (format "(defun org-git-version () \"The truncate git commit hash of Org mode.\" %S)\n" git-version)
-              "(provide 'org-version)\n"))))
-  :pin nil)
+;; (package! org :recipe
+;;   (:host nil :repo "https://git.tecosaur.net/mirrors/org-mode.git" :remote "mirror" :fork
+;;          (:host nil :repo "https://git.tecosaur.net/tec/org-mode.git" :branch "dev" :remote "tecosaur")
+;;          :files
+;;          (:defaults "etc")
+;;          :build t :pre-build
+;;          (with-temp-file "org-version.el"
+;;            (require 'lisp-mnt)
+;;            (let
+;;                ((version
+;;                  (with-temp-buffer
+;;                    (insert-file-contents "lisp/org.el")
+;;                    (lm-header "version")))
+;;                 (git-version
+;;                  (string-trim
+;;                   (with-temp-buffer
+;;                     (call-process "git" nil t nil "rev-parse" "--short" "HEAD")
+;;                     (buffer-string)))))
+;;              (insert
+;;               (format "(defun org-release () \"The release version of Org.\" %S)\n" version)
+;;               (format "(defun org-git-version () \"The truncate git commit hash of Org mode.\" %S)\n" git-version)
+;;               "(provide 'org-version)\n"))))
+;;   :pin nil)
 
-(unpin! org)
+;; (unpin! org)
+(package! xenops)
 ;; To install a package directly from a remote git repo, you must specify a
 ;; `:recipe'. You'll find documentation on what `:recipe' accepts here:
 ;; https://github.com/radian-software/straight.el#the-recipe-format
@@ -49,7 +49,30 @@
 ;(package! this-package
 ;  :recipe (:host github :repo "username/repo"
 ;           :files ("some-file.el" "src/lisp/*.el")))
+(package! telega-bridge-bot
+  :recipe (:host github :repo "zevlg/telega.el"
+                 :files ("contrib/telega-bridge-bot.el")))
+(package! telega-mnz
+  :recipe (:host github :repo "zevlg/telega.el"
+                 :files ("contrib/telega-mnz.el")))
+(package! org-modern)
+(package! valign)
 
+(package! sage-shell-mode)
+(package! ob-sagemath)
+(package! pdf-tools :recipe
+          (:host github
+                 :repo "dalanicolai/pdf-tools"
+                 :branch "pdf-roll"
+                 :files ("lisp/*.el"
+                         "README"
+                         ("build" "Makefile")
+                         ("build" "server")
+                         (:exclude "lisp/tablist.el" "lisp/tablist-filter.el"))))
+
+(package! image-roll :recipe
+          (:host github
+                 :repo "dalanicolai/image-roll.el"))
 ;; If you'd like to disable a package included with Doom, you can do so here
 ;; with the `:disable' property:
 ;(package! builtin-package :disable t)
