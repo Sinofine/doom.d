@@ -87,7 +87,7 @@ If it's a token, then its treated as a function and enabled. Otherwise, the form
 (require 'rime)
 (setq default-input-method "rime")
 (setq rime-user-data-dir "~/.config/rime"
-      rime-share-data-dir "/nix/store/dvxkwk52ns8c26himjjb4rwrarjp7hhs-rime-data-0.38.20211002/share/rime-data"
+      rime-share-data-dir "/etc/profiles/per-user/sinofine/share/rime-data"
       rime-show-candidate 'posframe
       rime-posframe-style 'simple
       rime-show-preedit 'inline)
