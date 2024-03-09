@@ -1,3 +1,6 @@
 [submodule "snippets"]
 	path = snippets
 	url = git@github.com:Sinofine/yasnippets.git
+[submodule "rime"]
+	path = rime
+	url = https://github.com/sheepduke/rime-config

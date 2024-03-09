@@ -5,6 +5,8 @@ Experimental.
 ;; Speed up.
 (setq read-process-output-max (* 1024 1024)) ;; 1mb
 (setq gc-cons-threshold 100000000)
+(benchmark-init/activate)
+(add-hook 'after-init-hook 'benchmark-init/deactivate)
 #+end_src
 ** Identificaion
 #+begin_src emacs-lisp :tangle yes
@@ -31,6 +33,10 @@ If it's a token, then its treated as a function and enabled. Otherwise, the form
 #+end_src
 
 ** General Settings
+*** Set fill column.
+#+begin_src emacs-lisp :tangle yes
+(setq fill-column 70)
+#+end_src
 *** Do not confirm kill.
 #+begin_src emacs-lisp :tangle yes
 (setq confirm-kill-emacs nil)
@@ -47,7 +53,7 @@ If it's a token, then its treated as a function and enabled. Otherwise, the form
 ** Graphics
 *** Set theme.
 #+begin_src emacs-lisp :tangle yes
-(setq doom-theme 'doom-opera)
+(setq doom-theme 'doom-ayu-light)
 #+end_src
 
 *** Set splash screen image & modify padding.
@@ -69,8 +75,9 @@ If it's a token, then its treated as a function and enabled. Otherwise, the form
 *** Set frame size & enable transparent background.
 #+begin_src emacs-lisp :tangle yes
 (setq default-frame-alist '((width . 90)
-                            (height . 50)
-                            (alpha-background . 80)))
+                            (height . 25)
+                            ;; (alpha-background . 90)
+                            ))
 #+end_src
 
 *** Enable precise scroll.
@@ -105,8 +112,12 @@ If it's a token, then its treated as a function and enabled. Otherwise, the form
 #+end_src
 
 *** Set fonts
-I use cnfonts to align fonts.
 #+begin_src emacs-lisp :tangle yes
+(setq doom-font (font-spec :family "等距更纱黑体 SC" :size 14)
+      doom-variable-pitch-font (font-spec :family "Tinos"))
+#+end_src
+I do not use cnfonts to align fonts.
+#+begin_src emacs-lisp :tangle no
 (cnfonts-mode 1)
 (setq cnfonts-personal-fontnames '(("Luxi Mono") ("HYXinRenWenSongW") () ())
       cnfonts-use-face-font-rescale t)
@@ -120,11 +131,33 @@ I use cnfonts to align fonts.
 #+end_src
 
 Define maps.
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
 (define-key cnfonts-mode-map (kbd "C--") #'cnfonts-decrease-fontsize)
 (define-key cnfonts-mode-map (kbd "C-=") #'cnfonts-increase-fontsize)
 #+end_src
 
+*** Now playing
+#+begin_src emacs-lisp :tangle yes
+;;(require 'doom-modeline-now-playing)
+;;(doom-modeline-now-playing-timer)
+#+end_src
+*** Enable time
+#+begin_src emacs-lisp :tangle yes
+(require 'cn-zodiac-time)
+(setq display-time-string-forms '((cn-zodiac-time 'branches)))
+(display-time-mode)
+#+end_src
+*** Input method
+#+begin_src emacs-lisp :tangle yes
+(setq pyim-default-scheme 'pyim-shuangpin)
+(require 'rime)
+(setq default-input-method "rime")
+(setq rime-user-data-dir "~/.config/rime"
+      rime-share-data-dir "/nix/store/dvxkwk52ns8c26himjjb4rwrarjp7hhs-rime-data-0.38.20211002/share/rime-data"
+      rime-show-candidate 'posframe
+      rime-posframe-style 'simple
+      rime-show-preedit 'inline)
+#+end_src
 ** Packages
 *** Org mode.
 **** Do not evaluate code blocks when exporting.
@@ -151,16 +184,24 @@ Define maps.
         :zoom 1.0)
       )
 #+end_src
+**** Set MathML processor.
+#+begin_src emacs-lisp :tangle yes
+(setq org-latex-to-mathml-convert-command
+      "latexmlmath \"%i\" --presentationmathml=%o")
+#+end_src
 *** Telega.
 #+begin_src emacs-lisp :tangle yes
 (setq telega-emoji-use-images nil)
 #+end_src
+
+#+RESULTS:
+
 **** Keymaps.
 #+begin_src emacs-lisp :tangle yes
 (map! :leader :desc "Open telega" :n "ot" 'telega)
 #+end_src
 **** Modify message faces.
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
 (setq telega-avatar-workaround-gaps-for '(return t))
 (add-hook 'telega-load-hook
           (lambda ()
@@ -232,7 +273,8 @@ Define maps.
 *** AucTeX & CDLaTeX.
 I hardly use ~\textsf~, but ideals love ~\mathfrak~.
 #+begin_src emacs-lisp :tangle yes
-(setq cdlatex-math-modify-alist '((102 "\\mathfrak" "\\textsf" t nil nil)))
+(setq cdlatex-math-modify-alist '((102 "\\mathfrak" "\\textsf" t nil nil))
+      cdlatex-math-symbol-alist '((111 "\\omega" "\\circ")))
 #+end_src
 Make completion smarter.
 #+begin_src emacs-lisp :tangle yes
@@ -273,7 +315,7 @@ My screen so big that xenops preview should be small.
 #+end_src
 
 *** Sage mode. (Virtually I need a calculator.)
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
 (custom-set-variables
  '(sage-shell:use-prompt-toolkit nil)
  '(sage-shell:use-simple-prompt t)
@@ -284,7 +326,7 @@ My screen so big that xenops preview should be small.
 (add-hook 'sage-shell:sage-mode-hook #'eldoc-mode)
 #+end_src
 **** Org mode associated.
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
 (setq org-babel-default-header-args:sage
       '((:session . t)
         (:results . "output")))
