@@ -81,7 +81,7 @@ If it's a token, then its treated as a function and enabled. Otherwise, the form
 #+end_src
 
 *** Enable precise scroll.
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
 (pixel-scroll-precision-mode)
 #+end_src
 
@@ -115,11 +115,12 @@ If it's a token, then its treated as a function and enabled. Otherwise, the form
 #+begin_src emacs-lisp :tangle yes
 (setq doom-font (font-spec :family "Iosevka Comfy Motion" :size 18)
       doom-variable-pitch-font (font-spec :family "Iosevka Comfy Motion Duo"))
-(dolist (charset '(kana han cjk-misc bopomofo))
-  (set-fontset-font (frame-parameter nil 'font)
-                    charset (font-spec :family "Source Han Serif SC")))
-(set-fontset-font (frame-parameter nil 'font) 'emoji (font-spec :family "Segoe UI Emoji"))
-
+(add-hook! 'doom-load-theme-hook :append
+           (set-face-attribute 'default nil :weight 'medium)
+  (dolist (charset '(kana han cjk-misc bopomofo))
+    (set-fontset-font (frame-parameter nil 'font)
+                      charset (font-spec :family "Noto Serif CJK SC")))
+  (set-fontset-font (frame-parameter nil 'font) 'emoji (font-spec :family "Segoe UI Emoji")))
 #+end_src
 I do not use cnfonts to align fonts.
 #+begin_src emacs-lisp :tangle no
@@ -154,7 +155,7 @@ Define maps.
 #+end_src
 *** Input method
 #+begin_src emacs-lisp :tangle yes
-(setq pyim-default-scheme 'pyim-shuangpin)
+;; (setq pyim-default-scheme 'pyim-shuangpin)
 (require 'rime)
 (setq default-input-method "rime")
 (setq rime-user-data-dir "~/.config/rime"
@@ -206,25 +207,29 @@ Define maps.
 (map! :leader :desc "Open telega" :n "ot" 'telega)
 #+end_src
 **** Modify message faces.
-#+begin_src emacs-lisp :tangle no
-(setq telega-avatar-workaround-gaps-for '(return t))
+#+begin_src emacs-lisp :tangle yes
+;; (setq telega-avatar-workaround-gaps-for '(return t))
 (add-hook 'telega-load-hook
           (lambda ()
             (set-face-attribute 'telega-msg-heading nil
                                 :background nil
                                 :underline 't
-                                :height 1.2
+                                ;; :height 1.2
                                 )
             (set-face-attribute 'telega-msg-inline-forward nil
                                 ;; :background "light gray"
                                 :underline nil
-                                :height 0.84)
+                                ;; :height 0.84
+                                )
             (set-face-attribute 'telega-msg-inline-reply nil
                                 ;; :background "light gray"
                                 :underline nil
-                                :height 0.84)
+                                ;; :height 0.84
+                                )
             ))
 #+end_src
+
+
 **** Modify brackets.
 #+begin_src emacs-lisp :tangle no
 (setq telega-brackets
@@ -274,7 +279,17 @@ Define maps.
          (:type :matrix :chat-id "!uoEcEMNaQYWmDWUQYY:matrix.org")))
       telega-bridge-bot-matrix-user "@sinofine:envs.net")
 #+end_src
-
+**** Set chatbuf window.
+#+begin_src emacs-lisp :tangle yes
+;; (setq telega-inserter-for-chat-button 'telega-ins--chat-full-2lines)
+(setq telega-chat-button-width 15)
+(setq telega-root-fill-column (+ 20 telega-chat-button-width))
+(put (get 'telega-chat 'button-category-symbol)
+    :inserter 'telega-ins--chat-full-2lines)
+(setq switch-to-buffer-preserve-window-point t)
+(setq telega-chat--display-buffer-action
+    '((display-buffer-reuse-window display-buffer-use-some-window)))
+#+end_src
 *** AucTeX & CDLaTeX.
 I hardly use ~\textsf~, but ideals love ~\mathfrak~.
 #+begin_src emacs-lisp :tangle yes

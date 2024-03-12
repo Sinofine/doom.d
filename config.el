@@ -48,8 +48,6 @@ If it's a token, then its treated as a function and enabled. Otherwise, the form
                             ;; (alpha-background . 90)
                             ))
 
-(pixel-scroll-precision-mode)
-
 (setq +doom-dashboard-menu-sections
       '(
         ("Recently opened files" :icon
@@ -75,10 +73,12 @@ If it's a token, then its treated as a function and enabled. Otherwise, the form
 
 (setq doom-font (font-spec :family "Iosevka Comfy Motion" :size 18)
       doom-variable-pitch-font (font-spec :family "Iosevka Comfy Motion Duo"))
-(dolist (charset '(kana han cjk-misc bopomofo))
-  (set-fontset-font (frame-parameter nil 'font)
-                    charset (font-spec :family "Source Han Serif SC")))
-(set-fontset-font (frame-parameter nil 'font) 'emoji (font-spec :family "Segoe UI Emoji"))
+(add-hook! 'doom-load-theme-hook :append
+           (set-face-attribute 'default nil :weight 'medium)
+  (dolist (charset '(kana han cjk-misc bopomofo))
+    (set-fontset-font (frame-parameter nil 'font)
+                      charset (font-spec :family "Noto Serif CJK SC")))
+  (set-fontset-font (frame-parameter nil 'font) 'emoji (font-spec :family "Segoe UI Emoji")))
 
 ;;(require 'doom-modeline-now-playing)
 ;;(doom-modeline-now-playing-timer)
@@ -87,7 +87,7 @@ If it's a token, then its treated as a function and enabled. Otherwise, the form
 (setq display-time-string-forms '((cn-zodiac-time 'branches)))
 (display-time-mode)
 
-(setq pyim-default-scheme 'pyim-shuangpin)
+;; (setq pyim-default-scheme 'pyim-shuangpin)
 (require 'rime)
 (setq default-input-method "rime")
 (setq rime-user-data-dir "~/.config/rime"
@@ -119,6 +119,26 @@ If it's a token, then its treated as a function and enabled. Otherwise, the form
 
 (map! :leader :desc "Open telega" :n "ot" 'telega)
 
+;; (setq telega-avatar-workaround-gaps-for '(return t))
+(add-hook 'telega-load-hook
+          (lambda ()
+            (set-face-attribute 'telega-msg-heading nil
+                                :background nil
+                                :underline 't
+                                ;; :height 1.2
+                                )
+            (set-face-attribute 'telega-msg-inline-forward nil
+                                ;; :background "light gray"
+                                :underline nil
+                                ;; :height 0.84
+                                )
+            (set-face-attribute 'telega-msg-inline-reply nil
+                                ;; :background "light gray"
+                                :underline nil
+                                ;; :height 0.84
+                                )
+            ))
+
 (require 'telega-bridge-bot)
 (setq telega-bridge-bot-bridge-info-plist
       '(-1001773572820 ; id of the @emacs_china
@@ -129,6 +149,15 @@ If it's a token, then its treated as a function and enabled. Otherwise, the form
         (5846938060
          (:type :matrix :chat-id "!uoEcEMNaQYWmDWUQYY:matrix.org")))
       telega-bridge-bot-matrix-user "@sinofine:envs.net")
+
+;; (setq telega-inserter-for-chat-button 'telega-ins--chat-full-2lines)
+(setq telega-chat-button-width 15)
+(setq telega-root-fill-column (+ 20 telega-chat-button-width))
+(put (get 'telega-chat 'button-category-symbol)
+    :inserter 'telega-ins--chat-full-2lines)
+(setq switch-to-buffer-preserve-window-point t)
+(setq telega-chat--display-buffer-action
+    '((display-buffer-reuse-window display-buffer-use-some-window)))
 
 (setq cdlatex-math-modify-alist '((102 "\\mathfrak" "\\textsf" t nil nil))
       cdlatex-math-symbol-alist '((111 "\\omega" "\\circ")))
