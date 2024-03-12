@@ -73,8 +73,12 @@ If it's a token, then its treated as a function and enabled. Otherwise, the form
          :action doom/open-private-config)
         ))
 
-(setq doom-font (font-spec :family "等距更纱黑体 SC" :size 14)
-      doom-variable-pitch-font (font-spec :family "Tinos"))
+(setq doom-font (font-spec :family "Iosevka Comfy Motion" :size 18)
+      doom-variable-pitch-font (font-spec :family "Iosevka Comfy Motion Duo"))
+(dolist (charset '(kana han cjk-misc bopomofo))
+  (set-fontset-font (frame-parameter nil 'font)
+                    charset (font-spec :family "Source Han Serif SC")))
+(set-fontset-font (frame-parameter nil 'font) 'emoji (font-spec :family "Segoe UI Emoji"))
 
 ;;(require 'doom-modeline-now-playing)
 ;;(doom-modeline-now-playing-timer)
