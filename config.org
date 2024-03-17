@@ -113,13 +113,14 @@ If it's a token, then its treated as a function and enabled. Otherwise, the form
 
 *** Set fonts
 #+begin_src emacs-lisp :tangle yes
-(setq doom-font (font-spec :family "Iosevka Comfy Motion" :size 18)
+(setq doom-font (font-spec :family "Anonymous Pro";; "Iosevka Comfy Motion"
+                           :size 18)
       doom-variable-pitch-font (font-spec :family "Iosevka Comfy Motion Duo"))
 (add-hook! 'doom-load-theme-hook :append
            (set-face-attribute 'default nil :weight 'medium)
   (dolist (charset '(kana han cjk-misc bopomofo))
     (set-fontset-font (frame-parameter nil 'font)
-                      charset (font-spec :family "Noto Serif CJK SC")))
+                      charset (font-spec :family "Noto Serif CJK SC" :height 0.5)))
   (set-fontset-font (frame-parameter nil 'font) 'emoji (font-spec :family "Segoe UI Emoji")))
 #+end_src
 I do not use cnfonts to align fonts.
@@ -367,4 +368,8 @@ My screen so big that xenops preview should be small.
 **** Disable backquote change warnings.
 #+begin_src emacs-lisp :tangle yes
 (add-to-list 'warning-suppress-types '(yasnippet backquote-change))
+#+end_src
+*** Vterm
+#+begin_src emacs-lisp :tangle yes
+(require 'vterm)
 #+end_src

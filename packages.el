@@ -34,7 +34,7 @@
         (format "(defun org-git-version () \"The truncate git commit hash of Org mode.\" %S)\n" git-version)
         "(provide 'org-version)\n"))))
   :pin nil)
-
+(package! vterm :disable t)
 (unpin! org)
 (package! xenops)
 ;; To install a package directly from a remote git repo, you must specify a

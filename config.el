@@ -71,13 +71,14 @@ If it's a token, then its treated as a function and enabled. Otherwise, the form
          :action doom/open-private-config)
         ))
 
-(setq doom-font (font-spec :family "Iosevka Comfy Motion" :size 18)
+(setq doom-font (font-spec :family "Anonymous Pro";; "Iosevka Comfy Motion"
+                           :size 18)
       doom-variable-pitch-font (font-spec :family "Iosevka Comfy Motion Duo"))
 (add-hook! 'doom-load-theme-hook :append
            (set-face-attribute 'default nil :weight 'medium)
   (dolist (charset '(kana han cjk-misc bopomofo))
     (set-fontset-font (frame-parameter nil 'font)
-                      charset (font-spec :family "Noto Serif CJK SC")))
+                      charset (font-spec :family "Noto Serif CJK SC" :height 0.5)))
   (set-fontset-font (frame-parameter nil 'font) 'emoji (font-spec :family "Segoe UI Emoji")))
 
 ;;(require 'doom-modeline-now-playing)
@@ -188,3 +189,5 @@ If it's a token, then its treated as a function and enabled. Otherwise, the form
 (add-hook 'post-command-hook #'my-yas-try-expanding-auto-snippets)
 
 (add-to-list 'warning-suppress-types '(yasnippet backquote-change))
+
+(require 'vterm)
