@@ -6,7 +6,8 @@
 (add-hook 'after-init-hook 'benchmark-init/deactivate)
 
 (setq user-full-name "Sinofine Lotusie"
-      user-mail-address "i@sinofine.me")
+      user-mail-address "i@sinofine.me"
+      epa-file-encrypt-to "B81EC219E528172D41DE8984C5A8B0172CE2D811")
 
 (defmacro add-fs-to-hook (hook &rest funcs)
   "Add functions to hook. A function is either an unquoted token, or a form.
@@ -33,7 +34,7 @@ If it's a token, then its treated as a function and enabled. Otherwise, the form
         (interactive)
         (doom-project-find-file "~/nixconfig")))
 
-(setq doom-theme 'doom-ayu-light)
+;; (setq doom-theme 'default)
 
 (setq fancy-splash-image (concat doom-user-dir "logo/hfut.svg"))
 (setq +doom-dashboard-banner-padding '(2 . 3))
@@ -71,16 +72,18 @@ If it's a token, then its treated as a function and enabled. Otherwise, the form
          :action doom/open-private-config)
         ))
 
-(setq doom-font (font-spec :family "等距更纱宋体 Slab SC";; "Anonymous Pro"
+(setq doom-font (font-spec :family "Terminus (TTF)";; "等距更纱宋体 Slab SC"
+                           ;; "Anonymous Pro"
                            ;; "Iosevka Comfy Motion"
                            :size 18)
       doom-variable-pitch-font (font-spec :family "Iosevka Comfy Motion Duo"))
-(add-hook! 'doom-load-theme-hook :append
-           (set-face-attribute 'default nil :weight 'medium)
-  (dolist (charset '(kana han cjk-misc bopomofo))
-    (set-fontset-font (frame-parameter nil 'font)
-                      charset (font-spec :family "等距更纱宋体 Slab SC" )))
-  (set-fontset-font (frame-parameter nil 'font) 'emoji (font-spec :family "Segoe UI Emoji")))
+(when (display-graphic-p) (add-hook! 'doom-init-ui-hook :append
+                            (set-face-attribute 'default nil :weight 'medium)
+                            (dolist (charset '(kana han cjk-misc bopomofo))
+                              (set-fontset-font (frame-parameter nil 'font)
+                                                charset (font-spec :family "等距更纱宋体 Slab SC" )))
+                            (set-fontset-font (frame-parameter nil 'font) 'emoji (font-spec :family "Segoe UI Emoji"))
+                            ))
 
 ;;(require 'doom-modeline-now-playing)
 ;;(doom-modeline-now-playing-timer)
@@ -121,7 +124,7 @@ If it's a token, then its treated as a function and enabled. Otherwise, the form
 
 (map! :leader :desc "Open telega" :n "ot" 'telega)
 
-;; (setq telega-avatar-workaround-gaps-for '(return t))
+(setq telega-avatar-workaround-gaps-for '(return t))
 (add-hook 'telega-load-hook
           (lambda ()
             (set-face-attribute 'telega-msg-heading nil

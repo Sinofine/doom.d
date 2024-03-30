@@ -68,6 +68,7 @@
 (package! ob-sagemath)
 (package! sicp)
 (package! pyim :disable t)
+(package! borland-blue-theme)
 ;; If you'd like to disable a package included with Doom, you can do so here
 ;; with the `:disable' property:
                                         ;(package! builtin-package :disable t)

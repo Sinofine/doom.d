@@ -11,7 +11,8 @@ Experimental.
 ** Identificaion
 #+begin_src emacs-lisp :tangle yes
 (setq user-full-name "Sinofine Lotusie"
-      user-mail-address "i@sinofine.me")
+      user-mail-address "i@sinofine.me"
+      epa-file-encrypt-to "B81EC219E528172D41DE8984C5A8B0172CE2D811")
 #+end_src
 
 ** Macros
@@ -53,9 +54,8 @@ If it's a token, then its treated as a function and enabled. Otherwise, the form
 ** Graphics
 *** Set theme.
 #+begin_src emacs-lisp :tangle yes
-(setq doom-theme 'doom-ayu-light)
+;; (setq doom-theme 'default)
 #+end_src
-
 *** Set splash screen image & modify padding.
 #+begin_src emacs-lisp :tangle yes
 (setq fancy-splash-image (concat doom-user-dir "logo/hfut.svg"))
@@ -113,16 +113,18 @@ If it's a token, then its treated as a function and enabled. Otherwise, the form
 
 *** Set fonts
 #+begin_src emacs-lisp :tangle yes
-(setq doom-font (font-spec :family "等距更纱宋体 Slab SC";; "Anonymous Pro"
+(setq doom-font (font-spec :family "Terminus (TTF)";; "等距更纱宋体 Slab SC"
+                           ;; "Anonymous Pro"
                            ;; "Iosevka Comfy Motion"
                            :size 18)
       doom-variable-pitch-font (font-spec :family "Iosevka Comfy Motion Duo"))
-(add-hook! 'doom-load-theme-hook :append
-           (set-face-attribute 'default nil :weight 'medium)
-  (dolist (charset '(kana han cjk-misc bopomofo))
-    (set-fontset-font (frame-parameter nil 'font)
-                      charset (font-spec :family "等距更纱宋体 Slab SC" )))
-  (set-fontset-font (frame-parameter nil 'font) 'emoji (font-spec :family "Segoe UI Emoji")))
+(when (display-graphic-p) (add-hook! 'doom-init-ui-hook :append
+                            (set-face-attribute 'default nil :weight 'medium)
+                            (dolist (charset '(kana han cjk-misc bopomofo))
+                              (set-fontset-font (frame-parameter nil 'font)
+                                                charset (font-spec :family "等距更纱宋体 Slab SC" )))
+                            (set-fontset-font (frame-parameter nil 'font) 'emoji (font-spec :family "Segoe UI Emoji"))
+                            ))
 #+end_src
 I do not use cnfonts to align fonts.
 #+begin_src emacs-lisp :tangle no
@@ -210,7 +212,7 @@ Define maps.
 #+end_src
 **** Modify message faces.
 #+begin_src emacs-lisp :tangle yes
-;; (setq telega-avatar-workaround-gaps-for '(return t))
+(setq telega-avatar-workaround-gaps-for '(return t))
 (add-hook 'telega-load-hook
           (lambda ()
             (set-face-attribute 'telega-msg-heading nil
