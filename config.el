@@ -195,3 +195,5 @@ If it's a token, then its treated as a function and enabled. Otherwise, the form
 (add-to-list 'warning-suppress-types '(yasnippet backquote-change))
 
 (require 'vterm)
+
+(map! :leader :desc "Open magit" :n "om" 'magit)

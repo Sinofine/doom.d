@@ -372,7 +372,13 @@ My screen so big that xenops preview should be small.
 #+begin_src emacs-lisp :tangle yes
 (add-to-list 'warning-suppress-types '(yasnippet backquote-change))
 #+end_src
+
 *** Vterm
 #+begin_src emacs-lisp :tangle yes
 (require 'vterm)
+#+end_src
+
+*** Magit
+#+begin_src emacs-lisp :tangle yes
+(map! :leader :desc "Open magit" :n "om" 'magit)
 #+end_src
